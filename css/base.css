@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --mac-bg: #1e1e1e;
+    --mac-titlebar: #2d2d2d;
+    --mac-border: rgba(255, 255, 255, 0.1);
+    --system-blue: #0A84FF;
+    --system-gray: #8E8E93;
+    --glass-bg: rgba(28, 28, 30, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+    font-family: 'Fira Code', monospace;
+}

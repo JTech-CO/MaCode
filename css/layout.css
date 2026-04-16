@@ -1,0 +1,39 @@
+/* 최신 macOS 스타일의 딥 추상 그래디언트 배경 */
+.presentation-bg {
+    background: #000;
+    background-image: 
+        radial-gradient(at 10% 20%, rgba(26, 42, 108, 0.4) 0%, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(178, 31, 31, 0.3) 0%, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 1) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+/* Glassmorphism 사이드바 */
+#sidebar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border-right: 1px solid var(--glass-border);
+}
+
+/* 줄바꿈 유지를 위한 설정 */
+#codeDisplay {
+    white-space: pre-wrap;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    tab-size: 4;
+}
+
+/* 소스코드 입력란 스크롤바 숨김 (기능은 유지) */
+#codeInput::-webkit-scrollbar {
+    display: none;
+}
+#codeInput {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    tab-size: 4;
+}
+
+/* 렌더링 중 상태 표시기 제어 */
+body.is-rendering #recordingIndicator {
+    display: flex;
+}

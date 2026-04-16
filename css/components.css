@@ -1,0 +1,82 @@
+/* macOS 스타일 입력창 */
+#fileNameInput, #codeInput, #languageSelect {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #eee;
+    transition: all 0.2s;
+}
+#fileNameInput:focus, #codeInput:focus, #languageSelect:focus {
+    border-color: var(--system-blue);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+}
+
+/* macOS 시스템 버튼 스타일 */
+#previewBtn, #startBtn {
+    border-radius: 6px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#previewBtn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+#previewBtn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#startBtn {
+    background: var(--system-blue);
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+}
+#startBtn:hover {
+    background: #0076e6;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(10, 132, 255, 0.4);
+}
+#startBtn:active {
+    transform: translateY(0);
+}
+
+/* Mac 윈도우 스크롤바 커스텀 */
+#codeDisplay::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+#codeDisplay::-webkit-scrollbar-track {
+    background: transparent;
+}
+#codeDisplay::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+#codeDisplay::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 타이핑 커서 애니메이션 */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+.cursor-block {
+    display: inline-block;
+    width: 8px;
+    height: 1.2em;
+    background-color: #d4d4d4;
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+}
+
+/* 구문 강조 색상 (VS Code 다크테마 기반) */
+.token-keyword { color: #569cd6; } /* 파란색 */
+.token-string { color: #ce9178; } /* 주황색 */
+.token-number { color: #b5cea8; } /* 연두색 */
+.token-comment { color: #6a9955; font-style: italic; } /* 초록색 */
+.token-function { color: #dcdcaa; } /* 노란색 */
+.token-operator { color: #d4d4d4; } /* 흰색 */
+.token-property { color: #9cdcfe; } /* 하늘색 (속성/변수) */
+.token-class { color: #4ec9b0; } /* 청록색 (클래스/객체) */
