@@ -2,7 +2,7 @@
 
 > **세련된 Mac 테마 UI에서 코드가 타이핑되는 애니메이션을 고화질 영상으로 추출하세요.**
 
-<img width="3840" height="2160" alt="image" src="https://i.imgur.com/Vt3kWOW.png" />
+<img width="100%" alt="image" src="https://i.imgur.com/Vt3kWOW.png" />
 
 ## 1. 소개 (Introduction)
 
