@@ -2,6 +2,8 @@
 
 > **세련된 Mac 테마 UI에서 코드가 타이핑되는 애니메이션을 고화질 영상으로 추출하세요.**
 
+<img width="3840" height="2160" alt="image" src="https://i.imgur.com/Vt3kWOW.png" />
+
 ## 1. 소개 (Introduction)
 
 이 프로젝트는 소스코드나 개발 튜토리얼 등을 Mac 윈도우 스타일로 렌더링하고, 이를 영상 콘텐츠로 제작하기 위해 개발된 웹 애플리케이션입니다. macOS Sequoia 스타일의 글래스모피즘(Glassmorphism) 설정 패널과 강력한 화면 크롭 녹화 기능을 제공합니다.
@@ -50,8 +52,9 @@ MaCode/
 ├── js/
 │   ├── main.js         # 앱 초기화 및 UI 이벤트 핸들링
 │   ├── editor.js       # 타이핑 엔진 및 구문 강조 로직
-│   └── utils.js        # VideoRecorder 클래스 및 화면 보정 유틸리티
-└── index.html          # 메인 HTML 구조
+│   ├── utils.js        # VideoRecorder 클래스 및 화면 보정 유틸리티
+├── index.html          # 메인 HTML 구조
+└── Sieve of Eratosthenes.py  # 예제 파일
 ```
 
 ## 5. 정보 (Info)
