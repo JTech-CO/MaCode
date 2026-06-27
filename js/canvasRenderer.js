@@ -1,24 +1,8 @@
-/**
- * Canvas rendering engine (P3).
- *
- * Draws the Mac window chrome + the progressively-revealed, syntax-highlighted
- * code directly onto a <canvas>, then records that canvas via captureStream().
- * Unlike the getDisplayMedia path (utils.js VideoRecorder), this needs NO
- * permission prompt, no tab picker, is resolution-deterministic (1920x1080 by
- * default), and works regardless of window size / scroll / zoom / browser.
- *
- * Reuses tokenize() (editor.js) for highlighting and reads theme colors from
- * the active [data-theme] CSS variables, so the recorded window matches the
- * on-screen theme. speedSettings/pickVideoMime/downloadRecording/showToast come
- * from editor.js + utils.js (loaded before this file).
- */
+// Canvas rendering engine (default recording path): draws the Mac window + highlighted code
+// onto a 1080p canvas and records it via captureStream — no permission prompt, deterministic output.
+// Reuses tokenize() (editor.js) and reads theme colors from the active [data-theme] CSS variables.
 
 class CanvasCodeRenderer {
-    /**
-     * @param {HTMLCanvasElement} canvas  target canvas (shown + recorded)
-     * @param {number} width   output width in px (default 1920)
-     * @param {number} height  output height in px (default 1080)
-     */
     constructor(canvas, width = 1920, height = 1080) {
         this.canvas = canvas;
         this.W = canvas.width = width;
@@ -30,7 +14,6 @@ class CanvasCodeRenderer {
         this._cacheLayout = null;
     }
 
-    /** Reads the active theme's resolved colors from CSS custom properties. */
     _readTheme() {
         const cs = getComputedStyle(document.documentElement);
         const v = (name, fallback) => (cs.getPropertyValue(name).trim() || fallback);
@@ -49,7 +32,6 @@ class CanvasCodeRenderer {
         };
     }
 
-    /** Prepares a render run (call once before play()/drawFrame()). */
     setup(code, lang, fileName) {
         this.tokens = tokenize(code, lang);
         this.total = code.length;
@@ -57,7 +39,6 @@ class CanvasCodeRenderer {
         this.theme = this._readTheme();
         this._cacheRevealed = -1;
 
-        // Layout metrics (scaled to the 1080p canvas, not the CSS viewport).
         const scale = this.H / 1080;
         this.pad = Math.round(64 * scale);
         this.radius = Math.round(20 * scale);
@@ -85,7 +66,7 @@ class CanvasCodeRenderer {
         this.maxVisibleLines = Math.max(1, Math.floor(this.codeH / this.lineHeight));
     }
 
-    /** Builds wrapped/tab-expanded visual lines for the first `revealed` chars. */
+    // Builds wrapped, tab-expanded visual lines for the first `revealed` chars (cached).
     _layout(revealed) {
         if (revealed === this._cacheRevealed) return this._cacheLayout;
         const t = this.theme;
@@ -103,7 +84,7 @@ class CanvasCodeRenderer {
             if (runColor !== color) { flushRun(); runColor = color; }
             runText += ch;
             col++;
-            if (col >= maxCols) { flushRun(); lines.push({ runs }); runs = []; col = 0; runColor = null; } // wrap
+            if (col >= maxCols) { flushRun(); lines.push({ runs }); runs = []; col = 0; runColor = null; }
         };
 
         let remaining = revealed;
@@ -124,7 +105,7 @@ class CanvasCodeRenderer {
             }
         }
         flushRun();
-        lines.push({ runs }); // the in-progress (cursor) line
+        lines.push({ runs });
         const layout = { lines, cursorRow: lines.length - 1, cursorCol: col };
         this._cacheRevealed = revealed;
         this._cacheLayout = layout;
@@ -163,7 +144,6 @@ class CanvasCodeRenderer {
         const ctx = this.ctx, t = this.theme;
         const { winX, winY, winW, winH, radius, titleH } = this;
 
-        // Drop shadow + body
         ctx.save();
         ctx.shadowColor = 'rgba(0,0,0,0.5)';
         ctx.shadowBlur = Math.round(60 * this.H / 1080);
@@ -173,7 +153,6 @@ class CanvasCodeRenderer {
         ctx.fill();
         ctx.restore();
 
-        // Title bar (clip to the window's rounded top)
         ctx.save();
         this._roundRectPath(winX, winY, winW, winH, radius);
         ctx.clip();
@@ -181,13 +160,11 @@ class CanvasCodeRenderer {
         ctx.fillRect(winX, winY, winW, titleH);
         ctx.restore();
 
-        // Border
         this._roundRectPath(winX, winY, winW, winH, radius);
         ctx.strokeStyle = t.border;
         ctx.lineWidth = Math.max(1, Math.round(this.H / 1080));
         ctx.stroke();
 
-        // Traffic lights (Tailwind red/yellow/green-500, matching the DOM window)
         const cy = winY + titleH / 2;
         const r = Math.round(9 * this.H / 1080);
         const gap = Math.round(28 * this.H / 1080);
@@ -200,7 +177,6 @@ class CanvasCodeRenderer {
             cx += gap;
         }
 
-        // Title text (file name), centered like the DOM title
         ctx.fillStyle = '#94a3b8';
         ctx.font = this.titleFont;
         ctx.textAlign = 'center';
@@ -208,7 +184,6 @@ class CanvasCodeRenderer {
         ctx.fillText(this.fileName, winX + winW / 2, cy + 1);
     }
 
-    /** Draws one full frame: backdrop, window, code revealed so far, caret. */
     drawFrame(revealed, showCursor) {
         const ctx = this.ctx, t = this.theme;
         this._drawBackdrop();
@@ -242,14 +217,7 @@ class CanvasCodeRenderer {
         }
     }
 
-    /**
-     * Runs the typing animation, drawing each frame. A timer advances the
-     * reveal target (preserving per-speed pacing + AI-chunk bursts); a single
-     * rAF draws each frame (so the caret blinks and captureStream stays fed).
-     * @param {Function} [onFrame]  called after each frame is drawn (e.g. to push
-     *                              the frame to the recorder via requestFrame).
-     * @returns {Function} stop() to abort early.
-     */
+    // onFrame() runs after each draw (used to push the frame to the recorder via requestFrame).
     play(speedLevel, useChunk, onComplete, onFrame) {
         const baseDelay = speedSettings[speedLevel].delay;
         const total = this.total;
@@ -261,9 +229,7 @@ class CanvasCodeRenderer {
             this._timeout = null;
             const step = useChunk ? Math.floor(Math.random() * 5) + 1 : 1;
             cursorChars = Math.min(total, cursorChars + step);
-            const delay = useChunk
-                ? baseDelay + (Math.random() > 0.8 ? 50 : 0)
-                : baseDelay + (Math.random() * (baseDelay * 0.5));
+            const delay = useChunk ? baseDelay + (Math.random() > 0.8 ? 50 : 0) : baseDelay + (Math.random() * (baseDelay * 0.5));
             if (cursorChars < total) this._timeout = setTimeout(advance, Math.max(1, delay));
         };
 
@@ -276,7 +242,7 @@ class CanvasCodeRenderer {
                 this._raf = requestAnimationFrame(frame);
             } else if (!done) {
                 done = true;
-                this.drawFrame(total, false); // clean final frame, no caret
+                this.drawFrame(total, false);
                 if (onFrame) onFrame();
                 if (onComplete) onComplete();
             }
@@ -299,10 +265,7 @@ class CanvasCodeRenderer {
     }
 }
 
-/**
- * Records a canvas to a video file via captureStream() — no getDisplayMedia,
- * no permission prompt. Shares codec selection + download with VideoRecorder.
- */
+// Records a canvas via captureStream — no getDisplayMedia. Shares codec/download with VideoRecorder.
 class CanvasRecorder {
     constructor(canvas, fps = 30) {
         this.canvas = canvas;
@@ -315,14 +278,11 @@ class CanvasRecorder {
         this.extension = 'webm';
     }
 
-    /** Throws (with a user-facing message) if recording is unsupported. */
     start() {
         const { mimeType, extension } = pickVideoMime();
         this.extension = extension;
-        // Manual-frame capture (captureStream(0) + track.requestFrame) records
-        // exactly the frames we draw and keeps producing frames even when the tab
-        // isn't actively compositing. Fall back to auto fps if requestFrame is
-        // unavailable on this browser.
+        // Manual-frame capture (captureStream(0) + requestFrame) records exactly the frames we draw,
+        // even when the tab isn't compositing. Fall back to auto fps where requestFrame is unavailable.
         this.stream = this.canvas.captureStream(0);
         this.track = this.stream.getVideoTracks()[0];
         this.manual = !!(this.track && typeof this.track.requestFrame === 'function');
@@ -336,7 +296,6 @@ class CanvasRecorder {
         this.recorder.start();
     }
 
-    /** Pushes the current canvas content as one video frame (manual mode). */
     captureFrame() {
         if (this.manual && this.track) this.track.requestFrame();
     }

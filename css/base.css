@@ -1,15 +1,8 @@
-/* 폰트는 index.html의 <link>로 병렬 로드 (render-blocking @import 제거).
-   미사용 Inter는 제거 — body는 시스템 폰트 스택을 사용한다. */
-
 :root {
-    /* Theme-independent (app chrome) */
     --system-blue: #0A84FF;
     --system-gray: #8E8E93;
     --glass-bg: rgba(28, 28, 30, 0.75);
     --glass-border: rgba(255, 255, 255, 0.15);
-
-    /* Default theme = dark (VS Code); also the fallback if data-theme is unset.
-       The code-window chrome and syntax colors below are overridden per theme. */
     --mac-bg: #1e1e1e;
     --mac-titlebar: #2d2d2d;
     --mac-border: rgba(255, 255, 255, 0.1);
@@ -23,7 +16,6 @@
     --token-class: #4ec9b0;
 }
 
-/* Light (VS Code Light) */
 [data-theme="light"] {
     --mac-bg: #ffffff;
     --mac-titlebar: #e8e8e8;
@@ -38,7 +30,6 @@
     --token-class: #267f99;
 }
 
-/* Monokai */
 [data-theme="monokai"] {
     --mac-bg: #272822;
     --mac-titlebar: #1e1f1c;

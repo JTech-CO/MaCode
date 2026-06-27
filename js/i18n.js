@@ -1,13 +1,5 @@
-/**
- * Internationalization (KR / EN).
- *
- * The UI strings, runtime messages (toasts/errors), and the default sample code
- * all live here as the single source of truth. t(key) resolves a (dot-pathed)
- * string in the current language (MACODE_LANG); setLangGlobal() switches it.
- * The DOM updates themselves are done by main.js applyLanguage(). Loaded first
- * (before utils.js/editor.js/main.js) so t() is available everywhere.
- */
-
+// i18n (KR/EN): UI strings, runtime messages, and the default sample code. Single source of
+// truth; t(key) resolves in the current language. Loaded first so t() is available everywhere.
 const I18N = {
     ko: {
         fileName: '파일 이름',
@@ -71,9 +63,7 @@ const I18N = {
     }
 };
 
-// Default sample code per language — same program, localized comments. The `\\n`
-// inside the f-string is a literal backslash-n in the Python source (a template
-// literal would otherwise turn it into a real newline).
+// Same program, localized comments. `\\n` is a literal backslash-n in the Python source.
 const SAMPLE_CODE = {
     ko: `# 소수 찾기 프로그램 (Sieve of Eratosthenes)
 # 1부터 n까지의 소수를 찾고, 개수와 합을 계산합니다.
@@ -147,17 +137,11 @@ if __name__ == "__main__":
 
 let MACODE_LANG = 'ko';
 
-/** Switches the active language used by t(). */
 function setLangGlobal(lang) {
     MACODE_LANG = I18N[lang] ? lang : 'ko';
 }
 
-/**
- * Resolves a dot-pathed key (e.g. 'toast.done') in the current language,
- * falling back to Korean, then to the key itself.
- * @param {string} key
- * @returns {*}
- */
+// Resolves a dot-pathed key (e.g. 'toast.done'), falling back to Korean then the key itself.
 function t(key) {
     const parts = key.split('.');
     const dig = (table) => {
