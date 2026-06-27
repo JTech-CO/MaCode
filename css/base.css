@@ -1,0 +1,63 @@
+/* 폰트는 index.html의 <link>로 병렬 로드 (render-blocking @import 제거).
+   미사용 Inter는 제거 — body는 시스템 폰트 스택을 사용한다. */
+
+:root {
+    /* Theme-independent (app chrome) */
+    --system-blue: #0A84FF;
+    --system-gray: #8E8E93;
+    --glass-bg: rgba(28, 28, 30, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.15);
+
+    /* Default theme = dark (VS Code); also the fallback if data-theme is unset.
+       The code-window chrome and syntax colors below are overridden per theme. */
+    --mac-bg: #1e1e1e;
+    --mac-titlebar: #2d2d2d;
+    --mac-border: rgba(255, 255, 255, 0.1);
+    --code-fg: #d4d4d4;
+    --token-keyword: #569cd6;
+    --token-string: #ce9178;
+    --token-number: #b5cea8;
+    --token-comment: #6a9955;
+    --token-function: #dcdcaa;
+    --token-property: #9cdcfe;
+    --token-class: #4ec9b0;
+}
+
+/* Light (VS Code Light) */
+[data-theme="light"] {
+    --mac-bg: #ffffff;
+    --mac-titlebar: #e8e8e8;
+    --mac-border: rgba(0, 0, 0, 0.12);
+    --code-fg: #1f1f1f;
+    --token-keyword: #0000ff;
+    --token-string: #a31515;
+    --token-number: #098658;
+    --token-comment: #008000;
+    --token-function: #795e26;
+    --token-property: #001080;
+    --token-class: #267f99;
+}
+
+/* Monokai */
+[data-theme="monokai"] {
+    --mac-bg: #272822;
+    --mac-titlebar: #1e1f1c;
+    --mac-border: rgba(255, 255, 255, 0.1);
+    --code-fg: #f8f8f2;
+    --token-keyword: #f92672;
+    --token-string: #e6db74;
+    --token-number: #ae81ff;
+    --token-comment: #75715e;
+    --token-function: #a6e22e;
+    --token-property: #fd971f;
+    --token-class: #66d9ef;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+    font-family: 'Fira Code', monospace;
+}

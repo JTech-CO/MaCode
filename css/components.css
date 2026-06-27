@@ -1,0 +1,127 @@
+/* macOS 스타일 입력창 */
+#fileNameInput, #codeInput, #languageSelect, #themeSelect, #recordModeSelect {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #eee;
+    transition: all 0.2s;
+}
+#fileNameInput:focus, #codeInput:focus, #languageSelect:focus, #themeSelect:focus, #recordModeSelect:focus {
+    border-color: var(--system-blue);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+}
+
+/* macOS 시스템 버튼 스타일 */
+#previewBtn, #startBtn {
+    border-radius: 6px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#previewBtn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+#previewBtn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#startBtn {
+    background: var(--system-blue);
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+}
+#startBtn:hover {
+    background: #0076e6;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(10, 132, 255, 0.4);
+}
+#startBtn:active {
+    transform: translateY(0);
+}
+
+/* Mac 윈도우 스크롤바 커스텀 */
+#codeDisplay::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+#codeDisplay::-webkit-scrollbar-track {
+    background: transparent;
+}
+#codeDisplay::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+#codeDisplay::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 모션 최소화 설정 존중 (커서 깜빡임 + REC 펄스 정지) */
+@media (prefers-reduced-motion: reduce) {
+    .cursor-block { animation: none; }
+    #recordingIndicator { animation: none; }
+}
+
+/* 타이핑 커서 애니메이션 */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+.cursor-block {
+    display: inline-block;
+    width: 8px;
+    height: 1.2em;
+    background-color: var(--code-fg);
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+}
+
+/* 비차단 토스트 알림 (녹화 성공/실패/취소 피드백) */
+#toastContainer {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+.toast {
+    max-width: min(90vw, 420px);
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #fff;
+    background: rgba(40, 40, 42, 0.92);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: auto;
+}
+.toast--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.toast--success { border-color: rgba(48, 209, 88, 0.55); }
+.toast--error { border-color: rgba(255, 69, 58, 0.6); }
+.toast--info { border-color: var(--glass-border); }
+
+/* 구문 강조 색상 (테마별 CSS 변수, base.css에서 정의) */
+.token-keyword { color: var(--token-keyword); }
+.token-string { color: var(--token-string); }
+.token-number { color: var(--token-number); }
+.token-comment { color: var(--token-comment); font-style: italic; }
+.token-function { color: var(--token-function); }
+.token-operator { color: var(--code-fg); }
+.token-property { color: var(--token-property); }
+.token-class { color: var(--token-class); }
