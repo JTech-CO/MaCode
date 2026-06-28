@@ -2,6 +2,8 @@
 
 > **세련된 Mac 테마 UI에서 코드가 타이핑되는 애니메이션을 1080p 고화질 영상으로 추출하세요.**
 
+<img src="https://raw.githubusercontent.com/JTech-CO/MaCode/refs/heads/main/image/1-main.png" width="95%">
+
 ## 1. 소개 (Introduction)
 
 이 프로젝트는 소스코드와 개발 튜토리얼을 macOS 윈도우 스타일로 렌더링하고, 타이핑 애니메이션을 고화질 영상으로 제작하기 위해 개발된 정적 웹 애플리케이션입니다.
