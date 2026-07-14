@@ -68,6 +68,22 @@ git commit -m "Update"
 git push
 ```
 
+## 보안 헤더 (Security Headers)
+
+GitHub Pages는 커스텀 HTTP 응답 헤더를 지원하지 않습니다. 따라서 문서 내 전달이 가능한 것은 `index.html`에 적용했고, 나머지는 아래와 같이 처리했습니다.
+
+| 항목 | 상태 | 방식 |
+|------|------|------|
+| Content-Security-Policy | ✅ 적용 | `<meta http-equiv>` (index.html) |
+| Referrer-Policy | ✅ 적용 | `<meta name="referrer" content="no-referrer">` |
+| 클릭재킹 방어 | ✅ 적용 | `js/security.js` 프레임버스터 (`frame-ancestors`는 meta에서 무시됨) |
+| HTTPS 강제 | ✅ 적용 | Pages "Enforce HTTPS" (HTTP→301) |
+| HSTS | ❌ 불가 | HTTP 헤더 전용 — Pages 미지원 |
+| X-Content-Type-Options | ❌ 불가 | HTTP 헤더 전용 — 정적 자산이 올바른 MIME으로 서빙되어 위험 낮음 |
+| Permissions-Policy | ❌ 불가 | HTTP 헤더 전용 — 앱이 요구하는 권한은 화면 캡처(선택 시)뿐 |
+
+> 전체 헤더가 필요해지면: 무료 Cloudflare를 DNS 프록시로 앞단에 두고 **Transform Rules → Response Header**로 HSTS/XCTO/Permissions-Policy를 주입하거나, Cloudflare Pages/Netlify(`_headers` 지원)로 호스팅을 옮기면 됩니다.
+
 ## 참고 (Notes)
 
 - 경로는 모두 상대경로(`css/…`, `js/…`)라 서브경로/커스텀도메인 어디서든 동작합니다.
